@@ -1,0 +1,26 @@
+
+#gameContainer{
+  text-align: center;
+}
+
+#gameBoard{
+  border: 3px solid;
+  text-align: center;
+  background-color: rgb(32, 32, 89);
+}
+
+#scoreText{
+  font-family: monospace;
+  font-size: 100px;
+  
+}
+
+#resetBtn{
+  font-family: monospace;
+  font-size: 25px;
+  border: 2px solid;
+  border-radius: 8px;
+  width: 100px;
+  height: 50px;
+  cursor: pointer;
+}
