@@ -39,11 +39,13 @@ resetBtn.addEventListener("click", resetGame);
 
 gameStart();
 
+//
 function gameStart(){
   createBall();
   nextTick();
 };
 
+//
 function nextTick(){
   intervalID = setTimeout(() => {
     clearBoard();
@@ -55,11 +57,13 @@ function nextTick(){
   }, 10)
 };
 
+//
 function clearBoard(){
   context.fillStyle = boardBackground;
   context.fillRect(0, 0, gameWidth, gameHeight);
 };
 
+//
 function drawPaddles(){
   context.strokeStyle = paddleBoarder;
 
@@ -72,15 +76,16 @@ function drawPaddles(){
   context.strokeRect(paddle2.x, paddle2.y, paddle2.width, paddle2.height);
 };
 
+//
 function createBall(){
   ballSpeed = 1;
-  if(Math.round(Math.random() == 1)){
+  if(Math.round(Math.random()) == 1){
     ballXDirection = 1;
   }
   else{
     ballXDirection = -1;
   }
-  if (Math.round(Math.random() == 1)) {
+  if (Math.round(Math.random()) == 1) {
     ballYDirection = 1;
   } else {
     ballYDirection = -1;
@@ -90,8 +95,13 @@ function createBall(){
   drawBall(ballX, ballY);
 };
 
-function moveBall(){}; 
+//
+function moveBall(){
+  ballX += (ballSpeed * ballXDirection);
+  ballY += (ballSpeed * ballYDirection);
+}; 
 
+//
 function drawBall(){
   context.fillStyle = ballColor;
   context.strokeStyle = ballBorderColor;
@@ -102,8 +112,43 @@ function drawBall(){
   context.fill();
 };
 
-function checkCollision(){};
+//
+function checkCollision(){
+  if(ballY <= 0 + ballRadius){
+    ballYDirection *= -1;
+  }
+  if(ballY >= gameHeight - ballRadius ){
+    ballYDirection *= -1;
+  }
+  if(ballX <= 0){
+    player2Score +=1;
+    updateScore();
+    createBall();
+    return
+  }
+  if(ballX >= gameWidth){
+    player1Score +=1;
+    updateScore();
+    createBall();
+    return
+  }
+  if(ballX <= (paddle1.x + paddle1.width + ballRadius)){
+    if(ballY > paddle1.y && ballY < paddle1.y + paddle1.height){
+      ballX = paddle1.x + paddle1.width + ballRadius; // if ball get stuck reset ball on the collision coordinate
+      ballXDirection *= -1;
+      ballSpeed +=1;
+    }
+  }
+  if (ballX >= paddle2.x - ballRadius) {
+    if(ballY > paddle2.y && ballY < paddle2.y + paddle2.height){
+      ballX = paddle2.x - ballRadius; 
+      ballXDirection *= -1;
+      ballSpeed += 1;
+    }
+  }
+};
 
+//
 function changeDirection(event){
   const keyPressed = event.keyCode;
 
