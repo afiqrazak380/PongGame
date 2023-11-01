@@ -23,7 +23,7 @@ h1{
 #resetBtn{
   font-family: monospace;
   font-size: 20px;
-  border: 2px solid;
+  border: 2px solid blue;
   border-radius: 8px;
   width: 90px;
   height: 40px;
