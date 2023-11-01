@@ -1,6 +1,8 @@
-
+// Get the canvas and context
 const gameBoard = document.querySelector("#gameBoard");
 const context = gameBoard.getContext("2d");
+
+// DOM elements and game properties
 const scoreText = document.querySelector("#scoreText");
 const resetBtn = document.querySelector("#resetBtn");
 const gameWidth = gameBoard.width;
@@ -13,6 +15,8 @@ const ballColor = "yellow";
 const ballBorderColor = "black";
 const ballRadius = 12.5;
 const paddleSpeed = 50;
+
+// Variables for the game
 let intervalID;
 let ballSpeed = 1;
 let ballX = gameWidth / 2;
@@ -34,18 +38,20 @@ let paddle2 = {
   y: gameHeight - 100
 };
 
+// Event listeners
 window.addEventListener("keydown", changeDirection);
 resetBtn.addEventListener("click", resetGame);
 
+// Initialize the game
 gameStart();
 
-//
+// Function to start the game
 function gameStart(){
   createBall();
   nextTick();
 };
 
-//
+// Function to run the game loop
 function nextTick(){
   intervalID = setTimeout(() => {
     clearBoard();
@@ -57,13 +63,13 @@ function nextTick(){
   }, 10)
 };
 
-//
+// Function to clear the canvas 
 function clearBoard(){
   context.fillStyle = boardBackground;
   context.fillRect(0, 0, gameWidth, gameHeight);
 };
 
-//
+// Function to draw the paddles
 function drawPaddles(){
   context.strokeStyle = paddleBoarder;
 
@@ -76,9 +82,13 @@ function drawPaddles(){
   context.strokeRect(paddle2.x, paddle2.y, paddle2.width, paddle2.height);
 };
 
-//
+// Function to create the ball
 function createBall(){
   ballSpeed = 1;
+  // another options to randomize the direction after ball is created
+  // ballXDirection = Math.random() < 0.5 ? 1 : -1;
+  // ballYDirection = Math.random() < 0.5 ? 1 : -1;
+ 
   if(Math.round(Math.random()) == 1){
     ballXDirection = 1;
   }
@@ -95,13 +105,13 @@ function createBall(){
   drawBall(ballX, ballY);
 };
 
-//
+// Function to move the ball
 function moveBall(){
   ballX += (ballSpeed * ballXDirection);
   ballY += (ballSpeed * ballYDirection);
 }; 
 
-//
+// Function to draw the ball
 function drawBall(){
   context.fillStyle = ballColor;
   context.strokeStyle = ballBorderColor;
@@ -112,12 +122,9 @@ function drawBall(){
   context.fill();
 };
 
-//
+// Function to check for collisions
 function checkCollision(){
-  if(ballY <= 0 + ballRadius){
-    ballYDirection *= -1;
-  }
-  if(ballY >= gameHeight - ballRadius ){
+  if(ballY <= 0 + ballRadius || ballY >= gameHeight - ballRadius){
     ballYDirection *= -1;
   }
   if(ballX <= 0){
@@ -148,7 +155,7 @@ function checkCollision(){
   }
 };
 
-//
+// Function to handle key presses and change paddle direction
 function changeDirection(event){
   const keyPressed = event.keyCode;
 
@@ -162,25 +169,51 @@ function changeDirection(event){
       if(paddle1.y > 0){
         paddle1.y -= paddleSpeed;
       }
-      break;
+    break;
     case paddle1Down:
       if(paddle1.y < gameHeight - paddle1.height){
         paddle1.y += paddleSpeed;
       }
-      break;
+    break;
     case paddle2Up:
       if(paddle2.y > 0){
         paddle2.y -= paddleSpeed;
       }
-      break;
+    break;
     case paddle2Down:
       if(paddle2.y < gameHeight - paddle2.height){
         paddle2.y += paddleSpeed;
       }
-      break;
+    break;
   }
 };
 
-function updateScore(){};
+// Function to update the scoro display
+function updateScore(){
+  scoreText.textContent = `${player1Score} : ${player2Score}`
+};
 
-function resetGame(){};
+// Fucntion to reset the game
+function resetGame(){
+  player1Score = 0;
+  player2Score = 0;
+  paddle1 = {
+    width: 25,
+    height: 100,
+    x: 0,
+    y: 0,
+  };
+  paddle2 = {
+    width: 25,
+    height: 100,
+    x: gameWidth - 25,
+    y: gameHeight - 100,
+  };
+  ballX = 0;
+  ballY = 0;
+  ballXDirection = 0;
+  ballYDirection = 0;
+  updateScore();
+  clearInterval(intervalID);
+  gameStart();
+};
